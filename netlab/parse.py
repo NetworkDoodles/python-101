@@ -11,7 +11,15 @@ def parse_version_line(line):
     The line has three parts split by commas. The first is the software's name with the image in
     brackets, the second is "Version" and the version. Whatever comes after the second comma is ignored.
     """
-    raise NotImplementedError("TODO 2.1a is still open")
+    # >>> solution
+    first, second = line.split(",")[:2]
+    software, _, image = first.partition("(")
+    return {
+        "software": software.strip(),
+        "image": image.strip().rstrip(")"),
+        "version": second.strip().removeprefix("Version").strip(),
+    }
+    # <<< solution
 
 
 # TODO 2.1b
@@ -21,7 +29,9 @@ def version_line(info):
     >>> version_line({"software": "CapeOS Software", "image": "CO-BOLT", "version": "0.11.0"})
     'CapeOS Software CO-BOLT 0.11.0'
     """
-    raise NotImplementedError("TODO 2.1b is still open")
+    # >>> solution
+    return f"{info['software']} {info['image']} {info['version']}"
+    # <<< solution
 
 
 # TODO 2.2
@@ -36,7 +46,24 @@ def interfaces_to_dicts(text):
     {'interface': 'GigabitEthernet0', 'ip_address': '172.80.111.11', 'ok': 'YES', 'method': 'DHCP',
      'status': 'up', 'protocol': 'up'}
     """
-    raise NotImplementedError("TODO 2.2 is still open")
+    # >>> solution
+    rows = []
+    for line in text.splitlines():
+        words = line.split()
+        if not words or words[0] == "Interface":
+            continue
+        name, address, ok, method = words[:4]
+        status = " ".join(words[4:-1])          # "up", "down" or "administratively down"
+        rows.append({
+            "interface": name,
+            "ip_address": None if address == "unassigned" else address,
+            "ok": ok,
+            "method": method,
+            "status": status,
+            "protocol": words[-1],
+        })
+    return rows
+    # <<< solution
 
 
 # A real `show ip interface brief` from r1, to try your functions on in the REPL:
