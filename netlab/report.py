@@ -26,7 +26,12 @@ COLUMNS = ["hostname", "model", "version", "serial", "uptime", "ip_interfaces"]
 def load_devices(source="yaml"):
     """The inventory as a list of dicts: from inventory.yml when source is "yaml", or from the lab's API
     when it's "api" (its address and token are LAB_API_URL and LAB_API_TOKEN in the environment)."""
-    raise NotImplementedError("TODO 8.1a is still open")
+    # >>> solution
+    if source == "api":
+        load_env()
+        return api_to_inventory(get_devices(os.environ["LAB_API_URL"], os.environ["LAB_API_TOKEN"]))
+    return load_inventory(ROOT / "inventory.yml")
+    # <<< solution
 
 
 # TODO 8.1b
@@ -44,13 +49,50 @@ def facts(device):
     DeviceError, as collect() did in chapter 6. So does a device that drops the session halfway through
     a command: Netmiko raises one of DROPPED (a read that timed out, an SSH error, a closed socket).
     """
-    raise NotImplementedError("TODO 8.1b is still open")
+    # >>> solution
+    try:
+        conn = connect(device["host"], device["device_type"])
+    except NetmikoAuthenticationException:
+        raise DeviceError(f"{device['name']}: login failed") from None
+    except NetmikoTimeoutException:
+        raise DeviceError(f"{device['name']}: no answer from {device['host']}") from None
+    try:
+        version = conn.send_command("show version", use_textfsm=True)[0]
+        brief = conn.send_command("show ip interface brief", use_textfsm=True)
+        hostname = conn.base_prompt
+    except DROPPED as e:
+        raise DeviceError(f"{device['name']}: the session broke ({type(e).__name__})") from None
+    finally:
+        try:
+            conn.disconnect()
+        except DROPPED:
+            pass                    # already gone: nothing left to close
+    if device["device_type"] == "arista_eos":
+        release, serial = version["image"], version["serial_number"]
+    else:
+        release, serial = version["version"], version["serial"][0]
+    return {
+        "hostname": hostname,
+        "model": device["model"],
+        "version": release,
+        "serial": serial,
+        "uptime": version["uptime"],
+        "ip_interfaces": sum(1 for i in brief if i["ip_address"] != "unassigned"),
+    }
+    # <<< solution
 
 
 # TODO 8.1c
 def write_csv(rows, path):
     """Write the rows to a CSV file with csv.DictWriter: a header row of COLUMNS, then one row per device."""
-    raise NotImplementedError("TODO 8.1c is still open")
+    # >>> solution
+    path = pathlib.Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=COLUMNS)
+        writer.writeheader()
+        writer.writerows(rows)
+    # <<< solution
 
 
 # TODO 8.2
@@ -60,8 +102,17 @@ def run(devices):
     Returns (rows, failures): the rows of every device that answered, in inventory order, and a dict
     of device name -> the DeviceError's message for every one that didn't.
     """
-    # TODO 8.2: this one stops at the first device that fails. Make it carry on.
-    rows = []
+    # >>> solution
+    rows, failures = [], {}
     for d in devices:
-        rows.append(facts(d))
-    return rows, {}
+        try:
+            rows.append(facts(d))
+        except DeviceError as e:
+            failures[d["name"]] = str(e)
+    return rows, failures
+    # --- starter: this one stops at the first device that fails. Make it carry on.
+    #| rows = []
+    #| for d in devices:
+    #|     rows.append(facts(d))
+    #| return rows, {}
+    # <<< solution

@@ -18,8 +18,15 @@ from netlab.report import load_devices, run, write_csv  # noqa: E402
 # TODO 8.3
 def parse_args(argv=None):
     """The command line's options: --source yaml|api (default yaml) and --out FILE (default inventory.csv)."""
-    # TODO 8.3: no options yet, just the defaults.
-    return argparse.Namespace(source="yaml", out="inventory.csv")
+    # >>> solution
+    p = argparse.ArgumentParser(description="Inventory every lab device to a CSV file.")
+    p.add_argument("--source", choices=["yaml", "api"], default="yaml",
+                   help="where the device list comes from (default: yaml, the file inventory.yml)")
+    p.add_argument("--out", default="inventory.csv", help="the CSV file to write (default: inventory.csv)")
+    return p.parse_args(argv)
+    # --- starter: no options yet, just the defaults.
+    #| return argparse.Namespace(source="yaml", out="inventory.csv")
+    # <<< solution
 
 
 def main(argv=None):
