@@ -1,0 +1,2 @@
+  address         ref clock       st   when   poll reach  delay  offset   disp
+ * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured

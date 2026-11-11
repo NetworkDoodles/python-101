@@ -1,0 +1,10 @@
+[
+  {"id": 1, "name": "r1", "role": "router", "model": "CapeOS-Bolt", "platform": "cisco_ios",
+   "ip": "172.80.111.11/24", "site": "lab", "serial": null},
+  {"id": 2, "name": "r2", "role": "router", "model": "CapeOS-Bolt", "platform": "cisco_ios",
+   "ip": "172.80.111.12/24", "site": "lab", "serial": null},
+  {"id": 3, "name": "r3", "role": "router", "model": "CapeOS-Pulse", "platform": "arista_eos",
+   "ip": "172.80.111.13/24", "site": "lab", "serial": null},
+  {"id": 4, "name": "sw1", "role": "switch", "model": "CapeOS-Bolt", "platform": "cisco_ios",
+   "ip": "172.80.111.21/24", "site": "lab", "serial": null}
+]

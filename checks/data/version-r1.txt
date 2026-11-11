@@ -1,0 +1,11 @@
+CapeOS Software (CO-BOLT), Version 0.11.0, LAB USE ONLY
+CapeOS is open-source lab software. Not for production use.
+
+r1 uptime is 0 minutes
+System image file is "flash:capeos-bolt.bin"
+
+capeos CO-1000 (revision A) with 1048576K/0K bytes of memory.
+Processor board ID CAPEHFI5RPW
+5 Gigabit Ethernet interfaces
+
+Configuration register is 0x2102

@@ -1,0 +1,69 @@
+# The lab, in containerlab: three routers, a switch, two hosts and a small inventory API.
+#
+#   host1 ── sw1 ── r1 ════ 10.0.12.0/30 ════ r2 ── host2
+#      192.168.10.0/24  ╲                    ╱  192.168.20.0/24
+#               10.0.13.0/30 ╲            ╱ 10.0.23.0/30
+#                              r3 (Pulse)
+#
+# r1, r2 and sw1 run CapeOS Bolt (an IOS-style CLI: Netmiko's device_type "cisco_ios"). r3 runs CapeOS
+# Pulse (an EOS-style CLI: device_type "arista_eos"). Your Python reaches all four over SSH on the
+# management network below, by name: containerlab adds r1, r2, r3, sw1 and api to /etc/hosts.
+# containerlab names ports by their Linux names: on r1, eth1 is GigabitEthernet1; on r3, Ethernet1.
+name: py101
+prefix: ""                          # containers are named after the nodes
+
+mgmt:
+  network: py101-mgmt
+  ipv4-subnet: 172.80.111.0/24
+
+topology:
+  kinds:
+    linux:
+      image: nd-pyhost:1
+  nodes:
+    # The routers and the switch boot from these configs. What you change on them lasts until
+    # `make reset`; the files themselves never change.
+    r1:
+      kind: linux
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      mgmt-ipv4: 172.80.111.11
+      env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
+      binds: [configs/r1.cfg:/flash/startup-config:ro]
+    r2:
+      kind: linux
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      mgmt-ipv4: 172.80.111.12
+      env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
+      binds: [configs/r2.cfg:/flash/startup-config:ro]
+    r3:
+      kind: linux
+      image: ghcr.io/dkhenderson2/capeos-pulse:0.11.0
+      mgmt-ipv4: 172.80.111.13
+      env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
+      binds: [configs/r3.cfg:/flash/startup-config:ro]
+    sw1:
+      kind: linux
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      mgmt-ipv4: 172.80.111.21
+      env: { CAPEOS_PLATFORM: switch, CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 8 }
+      binds: [configs/sw1.cfg:/flash/startup-config:ro]
+
+    # The inventory API: read-only, NetBox-style JSON, a token in the Authorization header.
+    api:
+      kind: linux
+      mgmt-ipv4: 172.80.111.50
+      env: { API_TOKEN: 0123456789abcdef0123456789abcdef01234567 }
+      binds: [api:/srv/api:ro]
+      exec: [start api]
+
+    # The hosts have no management port: eth1 is their only network card.
+    host1: { kind: linux, network-mode: none, exec: [start host1] }
+    host2: { kind: linux, network-mode: none, exec: [start host2] }
+
+  links:
+    - { endpoints: ["sw1:eth1", "r1:eth1"], mtu: 1500 }
+    - { endpoints: ["sw1:eth2", "host1:eth1"], mtu: 1500 }
+    - { endpoints: ["r1:eth2", "r2:eth1"], mtu: 1500 }
+    - { endpoints: ["r2:eth2", "host2:eth1"], mtu: 1500 }
+    - { endpoints: ["r1:eth3", "r3:eth1"], mtu: 1500 }
+    - { endpoints: ["r2:eth3", "r3:eth2"], mtu: 1500 }

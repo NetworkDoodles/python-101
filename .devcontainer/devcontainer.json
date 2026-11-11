@@ -1,0 +1,49 @@
+{
+  // Network Doodles lab environment · Python 101 for network engineers.
+  // Everything runs inside this one container: its own Docker engine (the routers, the switch, the hosts
+  // and the API live in there), containerlab, the lab's Python venv, and a browser IDE.
+  //
+  //   Codespaces  the badge in the README: nothing to install
+  //   VS Code     "Dev Containers: Reopen in Container"
+  //   Browser     devcontainer up, then http://localhost:13337 (code-server)
+  "name": "Network Doodles · Python 101",
+  "build": { "dockerfile": "Dockerfile", "context": ".." },
+  "privileged": true,
+  "remoteUser": "vscode",
+  "hostRequirements": { "cpus": 2, "memory": "4gb" },
+
+  "features": {
+    "ghcr.io/coder/devcontainer-features/code-server:2": {
+      "host": "0.0.0.0",
+      "port": "13337",
+      "auth": "none",
+      "workspace": "/workspaces/${localWorkspaceFolderBasename}",
+      "disableTelemetry": true,
+      "disableUpdateCheck": true,
+      "extensions": "ms-python.python,redhat.vscode-yaml"
+    }
+  },
+
+  // code-server has no password, so it is only ever published on this machine's loopback.
+  "appPort": ["127.0.0.1:13337:13337"],
+  "forwardPorts": [13337],
+  "portsAttributes": { "13337": { "label": "code-server (browser IDE)", "onAutoForward": "silent" } },
+
+  // Once, when the container is created: .env, and the images inside this container's own Docker.
+  "postCreateCommand": "make setup images",
+  // Every start: the lab.
+  "postStartCommand": "make up",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "redhat.vscode-yaml"],
+      "settings": {
+        "task.allowAutomaticTasks": "on",
+        "python.defaultInterpreterPath": "/home/vscode/.venvs/lab/bin/python",
+        "python.terminal.activateEnvironment": false,
+        "python.useEnvironmentsExtension": false,
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
+}

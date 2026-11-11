@@ -1,0 +1,19 @@
+# secrets: .env.example is the template, .env is yours
+.env
+# made by the lab, never committed
+.venv/
+scratch/.venv/
+__pycache__/
+.pytest_cache/
+reports/
+inventory.csv
+*.csv
+inventory.json
+# containerlab's own state for a running lab
+lab/clab-*/
+clab-*/
+lab/.state/
+.scratch/
+# make break T=4.2 puts these two in configs/ (make reset takes them out)
+configs/old-r9.cfg
+configs/locked.cfg

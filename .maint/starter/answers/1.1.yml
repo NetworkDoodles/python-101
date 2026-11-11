@@ -1,0 +1,10 @@
+# Task 1.1 · Running Python. Write each answer after its colon: https://networkdoodles.com/labs/python-101/task-1-1/
+# Then: make check T=1.1
+
+# Follow along
+version:          # what `python --version` prints, just the number, like 3.10.4
+venv_python:      # what `which python` prints in a new terminal (the lab's venv is active)
+repl_answer:      # what the REPL printed for  len("GigabitEthernet1")
+
+# Challenge
+system_python:    # what `which python` prints after `deactivate`

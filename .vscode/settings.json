@@ -1,0 +1,12 @@
+{
+  // Shared by VS Code and code-server. The venv lives in the dev container's image (see .devcontainer/),
+  // and every terminal activates it from ~/.zshrc, so the Python extension doesn't activate it again.
+  "python.defaultInterpreterPath": "/home/vscode/.venvs/lab/bin/python",
+  "python.terminal.activateEnvironment": false,
+  "python.useEnvironmentsExtension": false,
+  "python.testing.pytestEnabled": false,
+  "files.associations": { "*.clab.yml": "yaml", "*.cfg": "plaintext", "*.textfsm": "plaintext" },
+  "files.exclude": { "**/__pycache__": true, "**/.pytest_cache": true },
+  "[yaml]": { "editor.tabSize": 2, "editor.insertSpaces": true },
+  "[python]": { "editor.tabSize": 4, "editor.insertSpaces": true }
+}

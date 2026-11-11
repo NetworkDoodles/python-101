@@ -1,0 +1,33 @@
+# The lab's inventory: every device and how to reach it. Chapter 7 loads this file, and chapter 8
+# inventories every device in it.
+#
+# TODO 7.1d: four values in the first block don't load the way they read. Load the file in the REPL
+# (task 7.1 shows how), find them, and quote them so YAML keeps them as the strings you meant.
+site: lab
+country: NO                 # Norway
+rack: 0123                  # the label on the rack
+backup:
+  on: sunday                # which day the configs are backed up
+  at: 2:30                  # and when
+
+devices:
+  - name: r1
+    host: 172.80.111.11
+    device_type: cisco_ios
+    role: router
+    model: CapeOS-Bolt
+  - name: r2
+    host: 172.80.111.12
+    device_type: cisco_ios
+    role: router
+    model: CapeOS-Bolt
+  - name: r3
+    host: 172.80.111.13
+    device_type: arista_eos
+    role: router
+    model: CapeOS-Pulse
+  - name: sw1
+    host: 172.80.111.21
+    device_type: cisco_ios
+    role: switch
+    model: CapeOS-Bolt

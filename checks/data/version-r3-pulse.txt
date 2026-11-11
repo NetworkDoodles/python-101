@@ -1,0 +1,15 @@
+Hardware version: 
+Serial number: CAPE4S5VG44
+Hardware MAC address: cae2.b268.c68e
+System MAC address: cae2.b268.c68e
+
+Software image version: 4.99.0C
+Architecture: aarch64
+Internal build version: 4.99.0C-capeos.0.11.0
+Internal build ID: a88ba6d5-1754-5fc7-a40e-081e2d44d817
+
+Kernel version: 6.10.14-linuxkit
+
+Uptime: 0 minutes
+Total memory: 8025148 kB
+Free memory: 6362980 kB
