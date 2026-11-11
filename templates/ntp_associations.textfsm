@@ -1,11 +1,19 @@
-# TODO 5.2: a TextFSM template for CapeOS Bolt's `show ntp associations`. Try it in the REPL as you go:
-#   >>> from netlab.parsers import parse_ntp_associations
-#   >>> parse_ntp_associations(open("checks/data/ntp-r1.txt").read())
-#
-# First a Value line for every column you want (these four at least: ADDRESS, REF_CLOCK, STRATUM and REACH),
-# then the states. Start must skip the header; a rule that matches one server's line ends with -> Record;
-# and the legend at the bottom isn't a server. Task 5.2 in the guide shows the syntax.
-Value ADDRESS (\S+)
+Value Required ADDRESS (\d+\.\d+\.\d+\.\d+)
+Value TALLY ([*#+\-x ]?~?)
+Value REF_CLOCK (\S+)
+Value STRATUM (\d+)
+Value WHEN (\S+)
+Value POLL (\d+)
+Value REACH (\d+)
+Value DELAY (\S+)
+Value OFFSET (\S+)
+Value DISP (\S+)
 
 Start
-  ^\s*${ADDRESS} -> Record
+  ^\s+address\s+ref clock -> Servers
+
+Servers
+  ^${TALLY}${ADDRESS}\s+${REF_CLOCK}\s+${STRATUM}\s+${WHEN}\s+${POLL}\s+${REACH}\s+${DELAY}\s+${OFFSET}\s+${DISP}\s*$$ -> Record
+  ^\s+\*\s+sys\.peer
+  ^\s*$$
+  ^. -> Error
