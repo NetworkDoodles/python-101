@@ -16,7 +16,13 @@ def down_interfaces(interfaces):
     ...                  {"interface": "Gi4", "status": "administratively down", "protocol": "down"}])
     ['Gi4']
     """
-    raise NotImplementedError("TODO 3.1a is still open")
+    # >>> solution
+    down = []
+    for i in interfaces:
+        if i["status"] != "up" or i["protocol"] != "up":
+            down.append(i["interface"])
+    return down
+    # <<< solution
 
 
 # TODO 3.1b
@@ -25,7 +31,12 @@ def count_by_status(interfaces):
 
     Only statuses that occur are keys. No interfaces give {}.
     """
-    raise NotImplementedError("TODO 3.1b is still open")
+    # >>> solution
+    counts = {}
+    for i in interfaces:
+        counts[i["status"]] = counts.get(i["status"], 0) + 1
+    return counts
+    # <<< solution
 
 
 # TODO 3.2
@@ -38,4 +49,16 @@ def vlan_ranges(vlans):
     >>> vlan_ranges([20, 12, 10, 11, 11, 30, 31])
     '10-12,20,30-31'
     """
-    raise NotImplementedError("TODO 3.2 is still open")
+    # >>> solution
+    parts = []
+    numbers = sorted(set(vlans))
+    start = None
+    for i, n in enumerate(numbers):
+        if start is None:
+            start = n
+        last = i == len(numbers) - 1
+        if last or numbers[i + 1] != n + 1:
+            parts.append(str(start) if start == n else f"{start}-{n}")
+            start = None
+    return ",".join(parts)
+    # <<< solution
