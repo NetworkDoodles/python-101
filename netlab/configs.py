@@ -10,7 +10,12 @@ import pathlib
 # TODO 4.1a
 def has_ntp(config_text):
     """True when the config has at least one line that starts with "ntp server", otherwise False."""
-    raise NotImplementedError("TODO 4.1a is still open")
+    # >>> solution
+    for line in config_text.splitlines():
+        if line.startswith("ntp server"):
+            return True
+    return False
+    # <<< solution
 
 
 # TODO 4.1b
@@ -19,7 +24,12 @@ def load_configs(folder):
 
     Other files (a README, a .txt) are ignored. Read the files as UTF-8.
     """
-    raise NotImplementedError("TODO 4.1b is still open")
+    # >>> solution
+    configs = {}
+    for path in sorted(pathlib.Path(folder).glob("*.cfg")):
+        configs[path.stem] = path.read_text(encoding="utf-8")
+    return configs
+    # <<< solution
 
 
 # TODO 4.1c
@@ -32,7 +42,15 @@ def write_report(configs, out_path):
 
     Create the folder the file goes in if it isn't there yet.
     """
-    raise NotImplementedError("TODO 4.1c is still open")
+    # >>> solution
+    out_path = pathlib.Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["device", "has_ntp"])
+        for name in sorted(configs):
+            writer.writerow([name, "yes" if has_ntp(configs[name]) else "no"])
+    # <<< solution
 
 
 # TODO 4.2
@@ -44,5 +62,16 @@ def load_configs_safe(folder):
     couldn't be read: one you're not allowed to read (PermissionError), or one that isn't UTF-8 text
     (UnicodeDecodeError). Catch only those two: anything else is a bug, and should still stop you.
     """
-    # TODO 4.2: this one stops at the first bad file. Make it carry on.
-    return load_configs(folder), {}
+    # >>> solution
+    configs, problems = {}, {}
+    for path in sorted(pathlib.Path(folder).glob("*.cfg")):
+        try:
+            configs[path.stem] = path.read_text(encoding="utf-8")
+        except PermissionError:
+            problems[path.name] = "permission denied"
+        except UnicodeDecodeError as e:
+            problems[path.name] = f"not UTF-8 text (byte {e.start})"
+    return configs, problems
+    # --- starter: this one stops at the first bad file. Make it carry on.
+    #| return load_configs(folder), {}
+    # <<< solution
