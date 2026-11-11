@@ -47,3 +47,24 @@ def test_the_script(lab_up, tmp_path):
         written = {r["hostname"] for r in csv.DictReader(f)}
     reached = {"r1", "r2", "r3", "sw1"} - expected_down
     assert written == reached, f"the CSV should have every device that answered ({sorted(reached)}), it has {sorted(written)}"
+
+
+def test_a_session_that_breaks_halfway(monkeypatch):
+    """A device that logs in, then drops the session in the middle of a command."""
+    import netlab.report as report
+    from netmiko.exceptions import ReadTimeout
+
+    class Dropping:
+        base_prompt = "r7"
+
+        def send_command(self, *args, **kwargs):
+            raise ReadTimeout("Pattern not detected: 'r7#' in output.")
+
+        def disconnect(self):
+            raise OSError("Socket is closed")
+
+    monkeypatch.setattr(report, "connect", lambda host, device_type="cisco_ios": Dropping())
+    devices = [dict(name="r7", host="172.80.111.27", device_type="cisco_ios", role="router", model="CapeOS-Bolt")]
+    rows, failures = call(report.run, devices)
+    assert rows == [] and list(failures) == ["r7"], \
+        f"a session that breaks halfway through a command is a failure for that device, not a crash: {failures}"

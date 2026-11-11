@@ -41,7 +41,8 @@ def get_devices(base_url, token):
     The API wants the token in a header, the way NetBox does:  Authorization: Token <token>
     Time out after 5 seconds. When the API answers with an error status (403 for a wrong token), or
     doesn't answer at all, raise ApiError with a one-line message that includes the status code or
-    the reason.
+    the reason. The lab's API explains its errors in JSON ({"detail": "Invalid token"}), but an error
+    can also come from something in front of an API, as an HTML page: the message still needs the status.
     """
     raise NotImplementedError("TODO 7.2a is still open")
 

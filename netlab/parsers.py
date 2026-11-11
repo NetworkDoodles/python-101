@@ -30,8 +30,8 @@ def parse_brief_regex(text):
 def parse_brief_ntc(text, platform="cisco_ios"):
     """The same table, parsed by ntc-templates' template for `show ip interface brief` on this platform.
 
-    ntc-templates calls the protocol column "proto". Return the same keys and values as
-    parse_brief_regex, so the two can be compared.
+    ntc-templates calls the protocol column "proto" in its cisco_ios template and "protocol" in its
+    arista_eos one. Return the same keys and values as parse_brief_regex, so the two can be compared.
     """
     raise NotImplementedError("TODO 5.1c is still open")
 

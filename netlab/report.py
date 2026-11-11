@@ -9,13 +9,16 @@ import csv
 import os
 import pathlib
 
-from netmiko.exceptions import NetmikoAuthenticationException, NetmikoTimeoutException
+from netmiko.exceptions import NetmikoAuthenticationException, NetmikoTimeoutException, ReadException
+from paramiko.ssh_exception import SSHException
 
 from netlab.devices import DeviceError, connect
 from netlab.env import load_env
 from netlab.inventory import api_to_inventory, get_devices, load_inventory
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+# What Netmiko raises when a device drops a session it had already opened.
+DROPPED = (ReadException, SSHException, OSError, EOFError)
 COLUMNS = ["hostname", "model", "version", "serial", "uptime", "ip_interfaces"]
 
 
@@ -38,7 +41,8 @@ def facts(device):
     ip_interfaces  how many interfaces in show ip interface brief have an IP address
 
     Failures to log in or connect come out of connect() as Netmiko's exceptions; turn them into
-    DeviceError, as collect() did in chapter 6.
+    DeviceError, as collect() did in chapter 6. So does a device that drops the session halfway through
+    a command: Netmiko raises one of DROPPED (a read that timed out, an SSH error, a closed socket).
     """
     raise NotImplementedError("TODO 8.1b is still open")
 

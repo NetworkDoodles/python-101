@@ -31,3 +31,10 @@ def test_they_agree_on_real_output():
         a, b = call(parse_brief_regex, text), call(parse_brief_ntc, text)
         assert a == b, f"on {f.name} the two parsers disagree:\nregex: {a}\nntc:   {b}"
         assert len(a) == len([l for l in text.splitlines() if l.strip()]) - 1, f"{f.name}: one row per interface"
+
+
+def test_ntc_on_the_other_dialect():
+    rows = call(parse_brief_ntc, (DATA / "pulse-brief-r3.txt").read_text(), platform="arista_eos")
+    assert rows and set(rows[0]) == set(KEYS), \
+        f"with platform=\"arista_eos\" the keys are the same four (its template says \"protocol\", not \"proto\"): {rows[:1]}"
+    assert all(r["protocol"] == "up" for r in rows), "r3's interfaces are all up/up"

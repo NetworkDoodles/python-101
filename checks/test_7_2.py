@@ -33,3 +33,30 @@ def test_bad_token(lab_up):
 def test_no_answer(lab_up):
     with pytest.raises(ApiError):
         call(get_devices, "http://api:8999", "x")
+
+
+def test_an_error_page_that_isnt_json():
+    """A proxy or a web server in front of an API often answers errors with HTML, not JSON."""
+    import http.server
+    import threading
+
+    class Html(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = b"<html><body><h1>502 Bad Gateway</h1></body></html>"
+            self.send_response(502)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args):
+            pass
+
+    server = http.server.HTTPServer(("127.0.0.1", 0), Html)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        with pytest.raises(ApiError) as e:
+            call(get_devices, f"http://127.0.0.1:{server.server_port}", "x")
+    finally:
+        server.shutdown()
+    assert "502" in str(e.value), f"say what the API answered (502) in the message: {e.value}"
