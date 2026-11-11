@@ -1,14 +1,13 @@
 # The lab's inventory: every device and how to reach it. Chapter 7 loads this file, and chapter 8
 # inventories every device in it.
 #
-# TODO 7.1d: four values in the first block don't load the way they read. Load the file in the REPL
-# (task 7.1 shows how), find them, and quote them so YAML keeps them as the strings you meant.
+# Four values in the first block are quoted: unquoted, YAML would read them as False, 83, True and 150.
 site: lab
-country: NO                 # Norway
-rack: 0123                  # the label on the rack
+country: "NO"               # Norway
+rack: "0123"                # the label on the rack
 backup:
-  on: sunday                # which day the configs are backed up
-  at: 2:30                  # and when
+  "on": sunday              # which day the configs are backed up
+  at: "2:30"                # and when
 
 devices:
   - name: r1

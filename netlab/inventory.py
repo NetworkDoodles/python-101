@@ -19,19 +19,29 @@ def load_inventory(path):
 
     Use yaml.safe_load, never yaml.load.
     """
-    raise NotImplementedError("TODO 7.1a is still open")
+    # >>> solution
+    with open(path) as f:
+        return yaml.safe_load(f)["devices"]
+    # <<< solution
 
 
 # TODO 7.1b
 def save_json(devices, path):
     """Write the list of devices to a JSON file, indented by 2 spaces so a person can read it."""
-    raise NotImplementedError("TODO 7.1b is still open")
+    # >>> solution
+    with open(path, "w") as f:
+        json.dump(devices, f, indent=2)
+        f.write("\n")
+    # <<< solution
 
 
 # TODO 7.1c
 def load_json(path):
     """Read the JSON file save_json wrote, back into a list of dicts."""
-    raise NotImplementedError("TODO 7.1c is still open")
+    # >>> solution
+    with open(path) as f:
+        return json.load(f)
+    # <<< solution
 
 
 # TODO 7.2a
@@ -44,7 +54,20 @@ def get_devices(base_url, token):
     the reason. The lab's API explains its errors in JSON ({"detail": "Invalid token"}), but an error
     can also come from something in front of an API, as an HTML page: the message still needs the status.
     """
-    raise NotImplementedError("TODO 7.2a is still open")
+    # >>> solution
+    try:
+        r = requests.get(f"{base_url}/api/devices/", headers={"Authorization": f"Token {token}"}, timeout=5)
+        r.raise_for_status()
+    except requests.HTTPError:
+        try:
+            detail = r.json().get("detail", r.reason)
+        except ValueError:          # an error page that isn't JSON, from a proxy or a web server
+            detail = r.reason
+        raise ApiError(f"the API answered {r.status_code}: {detail}") from None
+    except requests.RequestException as e:
+        raise ApiError(f"no answer from the API at {base_url}: {type(e).__name__}") from None
+    return r.json()["results"]
+    # <<< solution
 
 
 # TODO 7.2b
@@ -54,4 +77,15 @@ def api_to_inventory(results):
     In the API, the address is primary_ip.address with its prefix ("172.80.111.11/24" -> "172.80.111.11"),
     the device_type is platform.slug, the role is role.slug and the model is device_type.model.
     """
-    raise NotImplementedError("TODO 7.2b is still open")
+    # >>> solution
+    devices = []
+    for d in results:
+        devices.append({
+            "name": d["name"],
+            "host": d["primary_ip"]["address"].split("/")[0],
+            "device_type": d["platform"]["slug"],
+            "role": d["role"]["slug"],
+            "model": d["device_type"]["model"],
+        })
+    return devices
+    # <<< solution
