@@ -25,19 +25,36 @@ def connect(host, device_type="cisco_ios"):
     load_env() first, so .env is read). Give up after 5 seconds if the device doesn't answer
     (conn_timeout=5).
     """
-    raise NotImplementedError("TODO 6.1a is still open")
+    # >>> solution
+    load_env()
+    return ConnectHandler(
+        device_type=device_type,
+        host=host,
+        username=os.environ["LAB_USER"],
+        password=os.environ["LAB_PASSWORD"],
+        conn_timeout=5,
+    )
+    # <<< solution
 
 
 # TODO 6.1b
 def interface_table(conn):
     """`show ip interface brief` on a connected device, parsed by ntc-templates: a list of dicts."""
-    raise NotImplementedError("TODO 6.1b is still open")
+    # >>> solution
+    return conn.send_command("show ip interface brief", use_textfsm=True)
+    # <<< solution
 
 
 # TODO 6.2a
 # A device in the inventory: its name, the address to log in to, and its device_type.
 #   Device(name="r3", host="172.80.111.13", device_type="arista_eos")
-Device = None
+# >>> solution | Device = None
+@dataclass
+class Device:
+    name: str
+    host: str
+    device_type: str = "cisco_ios"
+# <<< solution
 
 
 # TODO 6.2b
@@ -49,4 +66,18 @@ def collect(devices, command="show ip interface brief"):
     the device, like "r2: login failed (check LAB_USER and LAB_PASSWORD)", instead of Netmiko's
     exception and its traceback.
     """
-    raise NotImplementedError("TODO 6.2b is still open")
+    # >>> solution
+    results = {}
+    for d in devices:
+        try:
+            conn = connect(d.host, d.device_type)
+        except NetmikoAuthenticationException:
+            raise DeviceError(f"{d.name}: login failed (check LAB_USER and LAB_PASSWORD)") from None
+        except NetmikoTimeoutException:
+            raise DeviceError(f"{d.name}: no answer from {d.host} on port 22") from None
+        try:
+            results[d.name] = conn.send_command(command, use_textfsm=True)
+        finally:
+            conn.disconnect()
+    return results
+    # <<< solution
