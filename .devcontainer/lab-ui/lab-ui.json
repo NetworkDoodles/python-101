@@ -1,136 +1,33 @@
 {
   "title": "Python 101",
   "guide": "https://networkdoodles.com/labs/python-101/",
-  "network": {
-    "name": "py101",
-    "nodes": 7
-  },
+  "network": {"name": "py101", "nodes": 7},
   "launcher": "https://labs.networkdoodles.com",
   "chapters": [
-    {
-      "n": 1,
-      "title": "Running Python",
-      "tasks": [
-        [
-          "1.1",
-          "Hello, Python"
-        ],
-        [
-          "1.2",
-          "A venv of your own"
-        ]
-      ]
-    },
-    {
-      "n": 2,
-      "title": "Strings, lists and dicts",
-      "tasks": [
-        [
-          "2.1",
-          "A line of show version"
-        ],
-        [
-          "2.2",
-          "A whole show ip interface brief"
-        ]
-      ]
-    },
-    {
-      "n": 3,
-      "title": "Loops, conditionals and functions",
-      "tasks": [
-        [
-          "3.1",
-          "Which interfaces are down?"
-        ],
-        [
-          "3.2",
-          "VLAN ranges"
-        ]
-      ]
-    },
-    {
-      "n": 4,
-      "title": "Files, modules and errors",
-      "tasks": [
-        [
-          "4.1",
-          "Saved configs to a report"
-        ],
-        [
-          "4.2",
-          "Survive a bad file"
-        ]
-      ]
-    },
-    {
-      "n": 5,
-      "title": "Regex and TextFSM",
-      "tasks": [
-        [
-          "5.1",
-          "One table, two parsers"
-        ],
-        [
-          "5.2",
-          "A template of your own"
-        ]
-      ]
-    },
-    {
-      "n": 6,
-      "title": "Netmiko",
-      "tasks": [
-        [
-          "6.1",
-          "Log in to r1 from Python"
-        ],
-        [
-          "6.2",
-          "Every device, and a login that fails"
-        ]
-      ]
-    },
-    {
-      "n": 7,
-      "title": "YAML, JSON and REST",
-      "tasks": [
-        [
-          "7.1",
-          "The inventory in YAML and JSON"
-        ],
-        [
-          "7.2",
-          "The same inventory from an API"
-        ]
-      ]
-    },
-    {
-      "n": 8,
-      "title": "Capstone: an inventory to CSV",
-      "tasks": [
-        [
-          "8.1",
-          "Every device, one CSV"
-        ],
-        [
-          "8.2",
-          "A router that's down, a router that isn't there"
-        ],
-        [
-          "8.3",
-          "Two options, two sources, one CSV"
-        ]
-      ]
-    }
+    {"n": 1, "title": "Running Python", "tasks": [["1.1", "Hello, Python"], ["1.2", "A venv of your own"]]},
+    {"n": 2, "title": "Strings, lists and dicts", "tasks": [["2.1", "A line of show version"], ["2.2", "A whole show ip interface brief"]]},
+    {"n": 3, "title": "Loops, conditionals and functions", "tasks": [["3.1", "Which interfaces are down?"], ["3.2", "VLAN ranges"]]},
+    {"n": 4, "title": "Files, modules and errors", "tasks": [["4.1", "Saved configs to a report"], ["4.2", "Survive a bad file"]]},
+    {"n": 5, "title": "Regex and TextFSM", "tasks": [["5.1", "One table, two parsers"], ["5.2", "A template of your own"]]},
+    {"n": 6, "title": "Netmiko", "tasks": [["6.1", "Log in to r1 from Python"], ["6.2", "Every device, and a login that fails"]]},
+    {"n": 7, "title": "YAML, JSON and REST", "tasks": [["7.1", "The inventory in YAML and JSON"], ["7.2", "The same inventory from an API"]]},
+    {"n": 8, "title": "Capstone: an inventory to CSV", "tasks": [["8.1", "Every device, one CSV"], ["8.2", "A router that's down, a router that isn't there"], ["8.3", "Two options, two sources, one CSV"]]}
   ],
+  "topology": {
+    "hint": "Your code reaches these devices over SSH from the VS Code tab. Click one for a terminal on it, in a tab of its own; hover for its details.",
+    "nodes": [
+      {"id": "host1", "icon": "pc", "x": 0, "y": 170, "sub": "Linux host", "what": "A Linux host on sw1, so the routers have a neighbour to show.", "details": [["runs", "Linux"]]},
+      {"id": "sw1", "icon": "switch", "x": 190, "y": 170, "sub": "switch", "what": "A switch with VLANs 10, 11, 12 and 20.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "sw1 · 172.80.111.21"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
+      {"id": "r1", "icon": "router", "x": 390, "y": 170, "sub": "router", "what": "A router.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "r1 · 172.80.111.11"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
+      {"id": "r2", "icon": "router", "x": 650, "y": 170, "sub": "router", "what": "A router.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "r2 · 172.80.111.12"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
+      {"id": "host2", "icon": "pc", "x": 840, "y": 170, "sub": "Linux host", "what": "A Linux host behind r2.", "details": [["runs", "Linux"]]},
+      {"id": "r3", "icon": "router", "x": 520, "y": 330, "sub": "router", "what": "A router running the other dialect. It joins in chapter 6.", "details": [["runs", "CapeOS Pulse: a lab network OS, the other CLI dialect"], ["management", "r3 · 172.80.111.13"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
+      {"id": "api", "icon": "db", "x": 520, "y": 20, "sub": "inventory API", "what": "The inventory as a read-only REST API, answering in NetBox-style JSON. It's on the management network only.", "details": [["address", "http://api:8000/api/"], ["management", "api · 172.80.111.50"]]}
+    ],
+    "links": [["sw1:eth1", "r1:eth1"], ["sw1:eth2", "host1:eth1"], ["r1:eth2", "r2:eth1"], ["r2:eth2", "host2:eth1"], ["r1:eth3", "r3:eth1"], ["r2:eth3", "r3:eth2"]]
+  },
   "tabs": [
-    {
-      "id": "code",
-      "name": "VS Code",
-      "path": "/code/",
-      "port": 13337,
-      "strip": true
-    }
+    {"id": "code", "name": "VS Code", "path": "/code/", "port": 13337, "strip": true},
+    {"id": "topology", "name": "Topology", "kind": "topology"}
   ]
 }
