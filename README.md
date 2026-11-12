@@ -71,5 +71,5 @@ Python is the dev container's own, 3.11, with the packages pinned in `requiremen
 ## On a laptop
 
 Open the folder in VS Code with the Dev Containers extension (**Reopen in Container**), or run
-`devcontainer up --workspace-folder .` and open http://localhost:13337. Docker Desktop with 4 GB for it is
+`devcontainer up --workspace-folder .` and open the lab app at http://localhost:8000. Docker Desktop with 4 GB for it is
 plenty.
