@@ -16,7 +16,7 @@
   "topology": {
     "hint": "Your code reaches these devices over SSH from the VS Code tab. Click one for a terminal on it, in a tab of its own; hover for its details.",
     "nodes": [
-      {"id": "host1", "icon": "pc", "x": 0, "y": 170, "sub": "Linux host", "what": "A Linux host on sw1, so the routers have a neighbour to show.", "details": [["runs", "Linux"]]},
+      {"id": "host1", "icon": "pc", "x": 0, "y": 170, "sub": "Linux host", "what": "A Linux host on sw1, so the routers have a neighbor to show.", "details": [["runs", "Linux"]]},
       {"id": "sw1", "icon": "switch", "x": 190, "y": 170, "sub": "switch", "what": "A switch with VLANs 10, 11, 12 and 20.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "sw1 · 172.80.111.21"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
       {"id": "r1", "icon": "router", "x": 390, "y": 170, "sub": "router", "what": "A router.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "r1 · 172.80.111.11"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
       {"id": "r2", "icon": "router", "x": 650, "y": 170, "sub": "router", "what": "A router.", "details": [["runs", "CapeOS Bolt: a lab network OS with an IOS-style CLI"], ["management", "r2 · 172.80.111.12"], ["port names", "ethN is GigabitEthernetN in its CLI"]]},
