@@ -1,6 +1,6 @@
 # Python 101 for network engineers
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/NetworkDoodles/python-101?quickstart=1)
+**[▶ Open the lab](https://labs.networkdoodles.com/open/python-101)**: one click, nothing to install
 
 The hands-on lab for [Python 101 for network engineers](https://networkdoodles.com/lessons/python-101/) by
 David Henderson. You write small Python functions that turn CLI output into data, then point them at real
@@ -21,11 +21,14 @@ reach.
 
 ## Start
 
-1. Click **Open in GitHub Codespaces** above, then **Create codespace**. If VS Code asks whether you trust
-   the folder, click **Trust Folder & Continue**.
-2. Wait for the **Lab status** terminal to show every node with a green tick (the first start takes a few
-   minutes).
-3. Follow [task 1.1](https://networkdoodles.com/labs/python-101/task-1-1/).
+**Open the lab** (the link above, or the button on the [guide's page](https://networkdoodles.com/labs/python-101/)) and
+sign in with GitHub. It creates your own codespace, on your GitHub account's free allowance, and opens the lab
+app: the guide on the left, VS Code on the right. The first start takes a few minutes; the top bar says
+**network up** when it's ready. Then follow [task 1.1](https://networkdoodles.com/labs/python-101/task-1-1/):
+**Check task**, under the guide, checks your work.
+
+On your own laptop instead: open the repo in its dev container (VS Code's *Reopen in Container*, or
+`npx @devcontainers/cli up --workspace-folder .`), then the lab app is at http://localhost:8000.
 
 ## Commands
 
@@ -68,5 +71,5 @@ Python is the dev container's own, 3.11, with the packages pinned in `requiremen
 ## On a laptop
 
 Open the folder in VS Code with the Dev Containers extension (**Reopen in Container**), or run
-`devcontainer up --workspace-folder .` and open http://localhost:13337. Docker Desktop with 4 GB for it is
+`devcontainer up --workspace-folder .` and open the lab app at http://localhost:8000. Docker Desktop with 4 GB for it is
 plenty.
