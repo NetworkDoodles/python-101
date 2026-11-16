@@ -5,8 +5,8 @@
 def parse_version_line(line):
     """The first line of `show version`, as a dict.
 
-    >>> parse_version_line("CapeOS Software (CO-BOLT), Version 0.11.0, LAB USE ONLY")
-    {'software': 'CapeOS Software', 'image': 'CO-BOLT', 'version': '0.11.0'}
+    >>> parse_version_line("CapeOS Software (CO-BOLT), Version 0.11.2, LAB USE ONLY")
+    {'software': 'CapeOS Software', 'image': 'CO-BOLT', 'version': '0.11.2'}
 
     The line has three parts split by commas. The first is the software's name with the image in
     brackets, the second is "Version" and the version. Whatever comes after the second comma is ignored.
@@ -26,8 +26,8 @@ def parse_version_line(line):
 def version_line(info):
     """The dict from parse_version_line, back into one line of text.
 
-    >>> version_line({"software": "CapeOS Software", "image": "CO-BOLT", "version": "0.11.0"})
-    'CapeOS Software CO-BOLT 0.11.0'
+    >>> version_line({"software": "CapeOS Software", "image": "CO-BOLT", "version": "0.11.2"})
+    'CapeOS Software CO-BOLT 0.11.2'
     """
     # >>> solution
     return f"{info['software']} {info['image']} {info['version']}"
