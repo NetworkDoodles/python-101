@@ -25,25 +25,25 @@ topology:
     # `make reset`; the files themselves never change.
     r1:
       kind: linux
-      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.2
       mgmt-ipv4: 172.80.111.11
       env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
       binds: [configs/r1.cfg:/flash/startup-config:ro]
     r2:
       kind: linux
-      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.2
       mgmt-ipv4: 172.80.111.12
       env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
       binds: [configs/r2.cfg:/flash/startup-config:ro]
     r3:
       kind: linux
-      image: ghcr.io/dkhenderson2/capeos-pulse:0.11.0
+      image: ghcr.io/dkhenderson2/capeos-pulse:0.11.2
       mgmt-ipv4: 172.80.111.13
       env: { CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 4 }
       binds: [configs/r3.cfg:/flash/startup-config:ro]
     sw1:
       kind: linux
-      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.0
+      image: ghcr.io/dkhenderson2/capeos-bolt:0.11.2
       mgmt-ipv4: 172.80.111.21
       env: { CAPEOS_PLATFORM: switch, CAPEOS_USER: admin, CAPEOS_PASSWORD: capeos-lab, CAPEOS_PORTS: 8 }
       binds: [configs/sw1.cfg:/flash/startup-config:ro]
