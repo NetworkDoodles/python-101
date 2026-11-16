@@ -8,8 +8,8 @@ REAL = (DATA / "version-lines.txt").read_text().splitlines()
 
 
 def test_the_lab_line():
-    assert call(parse_version_line, "CapeOS Software (CO-BOLT), Version 0.11.0, LAB USE ONLY") == \
-        {"software": "CapeOS Software", "image": "CO-BOLT", "version": "0.11.0"}
+    assert call(parse_version_line, "CapeOS Software (CO-BOLT), Version 0.11.2, LAB USE ONLY") == \
+        {"software": "CapeOS Software", "image": "CO-BOLT", "version": "0.11.2"}
 
 
 def test_lines_from_the_lab_devices():
